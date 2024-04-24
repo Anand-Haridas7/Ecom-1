@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // Specify the destination folder for uploaded files
-
+var productHelpers=require("../helpers/productHelpers")
 
 
 let Products = [
@@ -49,7 +49,10 @@ router.post('/add-products', upload.single('image'), function (req, res) {
     console.log(req.body); // Contains form fields data
     console.log(req.file); // Contains uploaded file data
     // Your code here to handle form submission, like adding the product to your Products array
-    res.send('Product added successfully!');
+    
+    productHelpers.addProduct(req.body,(result)=>{
+      res.send("collection added")
+    });
 });
 
 module.exports = router;

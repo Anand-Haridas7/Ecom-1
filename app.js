@@ -6,7 +6,7 @@ var logger = require('morgan');
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
 const bodyParser = require('body-parser');
-
+const connectToMongoDB = require('./config/connection'); 
 var fileUpload = require('express-fileupload');
 
 
@@ -17,6 +17,15 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 app.engine('hbs', exhbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/', partialsDir: __dirname + '/views/partials/', }));
+(async () => {
+  try {
+      await connectToMongoDB();
+      console.log('MongoDB connected successfully');
+  } catch (error) {
+      console.error('Error connecting to MongoDB:', error);
+  }
+})();
+
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
 app.use(logger('dev'));
